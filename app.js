@@ -1,15 +1,15 @@
-const palavrasValidas = ["arroz", "amora", "teste"];
+const palavrasValidas = ["ARROZ", "amora", "teste"];
 
-const palavraDoDia = "arroz";
+const palavraDoDia = "ARROZ";
 
 let linha = 1;
 
-let entrada = [];
+let entrada = []; //Lista que recebe as letras digitadas
 
 const ouvinteDeTeclas = (event) => {
   let char = "";
   if (event.target.classList.contains("botao")) {
-    char = event.target.innerHTML.toUpperCase();
+    char = event.target.innerHTML.toUpperCase(); //Pega letra do teclado da tela e coloca na variável char
   }
 
   let alfabeto = [
@@ -44,11 +44,12 @@ const ouvinteDeTeclas = (event) => {
   ];
 
   if (!alfabeto.includes(char)) {
-    console.log("tecla inválida", char);
+    console.log("tecla inválida", char); //Verifica se a tecla é válida
     return null;
   }
 
   if (char == "ENTER") {
+    //Entra no validarEntrada e verifica o enter
     validarEntrada();
     linha += 1;
     return;
@@ -65,14 +66,19 @@ const ouvinteDeTeclas = (event) => {
 
   exibeLetra(char);
 };
-
 function exibeLetra(letra) {
   let elId = `l${linha}c${entrada.length}`;
-  const el = document.querySelector(".quadrado");
-  el.textContent = letra;
+  const el = document.querySelector(`.quadrado${entrada.length - 1}`);
+  console.log(el);
+  el.innerHTML = letra;
 }
 
 function validarEntrada() {
+  for (let juntar = 0; juntar < 4; juntar++) {
+    if (entrada[juntar] == palavraDoDia[juntar]) {
+      console.log("chgnadf");
+    }
+  }
   console.log("validar se " + entrada + " é igual " + palavraDoDia);
 }
 
