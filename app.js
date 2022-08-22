@@ -4,13 +4,16 @@ const palavraDoDia = "ARROZ";
 
 let linha = 1;
 
+let fimDeJogo = false;
+
 let entrada = []; //Lista que recebe as letras digitadas
 
-const ouvinteDeTeclas = (event) => {
-  let char = "";
-  if (event.target.classList.contains("botao")) {
-    char = event.target.innerHTML.toUpperCase(); //Pega letra do teclado da tela e coloca na variável char
+function validarTeclas(teclaDeEntrada) {
+  if (fimDeJogo) {
+    return;
   }
+
+  let char = teclaDeEntrada;
 
   let alfabeto = [
     "A",
@@ -40,7 +43,7 @@ const ouvinteDeTeclas = (event) => {
     "Y",
     "Z",
     "ENTER",
-    "BACKSPACE",
+    "DEL",
   ];
 
   if (!alfabeto.includes(char)) {
@@ -48,26 +51,31 @@ const ouvinteDeTeclas = (event) => {
     return null;
   }
 
-  if (char == "ENTER") {
+  if (char == "ENTER" && entrada.length == 5) {
     //Entra no validarEntrada e verifica o "enter"
     validarEntrada();
 
     linha += 1;
     entrada = [];
+
     return;
   }
 
-  if (char == "BACKSPACE") {
+  if (char == "DEL") {
+    let posicao = entrada.length;
     entrada.pop();
     console.log(entrada);
+    let elQuadrado = document.getElementById(`l${linha}c${posicao}`);
+    elQuadrado.textContent = "";
     return;
   }
 
-  entrada.push(char);
-  console.log(entrada);
-
-  exibeLetra(char);
-};
+  if (char != "ENTER") {
+    entrada.push(char);
+    console.log(entrada);
+    exibeLetra(char);
+  }
+}
 function exibeLetra(letra) {
   let elId = `l${linha}c${entrada.length}`;
   //const el = document.querySelector(`.quadrado${entrada.length - 1}`);
@@ -97,6 +105,11 @@ function validarEntrada() {
     posicao++;
   }
 
+  fimDeJogo = entrada.join("") == palavraDoDia;
+  if (fimDeJogo) {
+    console.log("FIM DE JOGO");
+    return;
+  }
   // for (let juntar = 0; juntar < 4; juntar++) {
   //   if (entrada[juntar] == palavraDoDia[juntar]) {
   //     // console.log("chgnadf");
@@ -104,4 +117,26 @@ function validarEntrada() {
   // }
 }
 
-// document.body.addEventListener("keydown", ouvinteDeTeclas);
+/**
+ * parar qdo fim de jogo
+ * aceitar input do teclado (e nao so do clique)
+ */
+
+const ouvinteDeTeclas = (event) => {
+  let tecla = event.key.toUpperCase();
+  if (tecla == "BACKSPACE") {
+    tecla = "DEL";
+  }
+  validarTeclas(tecla);
+};
+
+const tecladoClique = (event) => {
+  if (event.target.classList.contains("botao")) {
+    //Pega letra do teclado da tela e coloca na variável char
+    let char = event.target.innerHTML.toUpperCase();
+    console.log(char);
+    validarTeclas(char);
+  }
+};
+
+document.body.addEventListener("keydown", ouvinteDeTeclas);
