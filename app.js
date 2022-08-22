@@ -49,9 +49,11 @@ const ouvinteDeTeclas = (event) => {
   }
 
   if (char == "ENTER") {
-    //Entra no validarEntrada e verifica o enter
+    //Entra no validarEntrada e verifica o "enter"
     validarEntrada();
+
     linha += 1;
+    entrada = [];
     return;
   }
 
@@ -68,18 +70,38 @@ const ouvinteDeTeclas = (event) => {
 };
 function exibeLetra(letra) {
   let elId = `l${linha}c${entrada.length}`;
-  const el = document.querySelector(`.quadrado${entrada.length - 1}`);
+  //const el = document.querySelector(`.quadrado${entrada.length - 1}`);
+  const el = document.getElementById(elId);
   console.log(el);
   el.innerHTML = letra;
 }
 
 function validarEntrada() {
-  for (let juntar = 0; juntar < 4; juntar++) {
-    if (entrada[juntar] == palavraDoDia[juntar]) {
-      console.log("chgnadf");
-    }
-  }
+  console.log("apertei enter: ", entrada);
   console.log("validar se " + entrada + " é igual " + palavraDoDia);
+
+  // entrada = a,r,r,o,z
+  // palavraDoDia arroz
+
+  let posicao = 0;
+  for (letra of palavraDoDia) {
+    let elQuadrado = document.getElementById(`l${linha}c${posicao + 1}`);
+    const letraExisteNaPalavraDoDia = palavraDoDia.includes(entrada[posicao]);
+    if (letra == entrada[posicao]) {
+      elQuadrado.classList.add("bt-verde");
+    } else if (letraExisteNaPalavraDoDia) {
+      elQuadrado.classList.add("bt-amarelo");
+    } else {
+      elQuadrado.classList.add("bt-cinza-escuro");
+    }
+    posicao++;
+  }
+
+  // for (let juntar = 0; juntar < 4; juntar++) {
+  //   if (entrada[juntar] == palavraDoDia[juntar]) {
+  //     // console.log("chgnadf");
+  //   }
+  // }
 }
 
 // document.body.addEventListener("keydown", ouvinteDeTeclas);
